@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--Scripts & Links-->
+    <script src="javascripts/scripts.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log=="
+        crossorigin=""></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb"
+        crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Done-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vessel Route Tracer</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <h3 id="navTitle">
+            <i class="material-icons" style="font-size:36px">directions_boat</i> Vessel Route Tracer</h3>
+        <div id="info">
+            <p>Timestamp:
+                <span id="timestamp">2015-08-01 00:26:12</span>
+            </p>
+            <p>Number of ships displayed:
+                <span id="shipNumber">0</span>
+            </p>
+        </div>
+        <div id="controlls">
+            <button onclick="resumeStream()" type="button" class="btn btn-success">Resume</button>
+            <button onclick="pauseStream()" type="button" class="btn btn-warning">Pause</button>
+        </div>
+    </nav>
+    <div id="map"></div>
+    <script>
+        createMap();
+        handleSocket();
+        totalShipsDisplayed();
+    </script>
+    <main role="main">
+        <div class="jumbotron">
+            <div class="container">
+                <h3 class="display-5">Vessel Route Tracer</h3>
+            </div>
+        </div>
+    </main>
+    <nav class="navbar navbar-dark bg-dark"></nav>
+</body>
+
+</html>
