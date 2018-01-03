@@ -59,7 +59,7 @@ socketio.of('/requestData').on('connection', function (socket) {
     socket.on('clientReady', function () {
         console.log('Socket.IO says: Received event from client');
         console.log('Data stream to client initiated');
-        cursor = model.ShipsDataModel.find({}).lean().limit(100000).cursor();
+        cursor = model.ShipsDataModel.find({}).lean().limit(10000).cursor();
         cursor.map(function (doc) {
             return model.transformer(doc);
         });
