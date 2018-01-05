@@ -126,6 +126,10 @@ var drawPolyline = function () {
     });
 }
 
+var refreshPolyline = function(polyline,coordinates){
+  polyline.setLatLngs(coordinates);
+}
+
 var initPolyline = function (ship) {
     latlng = [];
     latlng.push(ship);
@@ -168,13 +172,15 @@ var createMap = function () {
         accessToken: 'pk.eyJ1Ijoiam9obmNoIiwiYSI6ImNqOGs0bGthazA5aXEyd3BjdzI1bWxoa2YifQ.QA5sfeo1MO_qJ5-b6NBdJQ'
     }).addTo(map);
 }
+
 var saveShip = function (ship) {
     var i;
     var flag = allTheShips.some((element) => {
         if (element != null)
             if (element.properties.MMSI == ship.properties.MMSI) {
-                // element.coordinates.push(ship.geometry.coordinates);
-                addToPolyline(element.shipPolyline, ship.geometry.coordinates);
+                element.coordinates.push(ship.geometry.coordinates);
+                refreshPolyline(ship.shipPolyline,ship.coordinates);
+                // addToPolyline(element.shipPolyline, ship.geometry.coordinates);
                 // addToLineString(element.lineString, ship.geometry.coordinates);
                 return true;
             }
@@ -182,7 +188,7 @@ var saveShip = function (ship) {
     if (!flag) {
         var newShip = {};
         newShip['properties'] = ship.properties;
-        // newShip['coordinates'] = [ship.geometry.coordinates];
+        newShip['coordinates'] = [ship.geometry.coordinates];
         newShip['shipPolyline'] = new L.polyline([ship.geometry.coordinates], {
             color: randomColor(),
             className: 'polyline'

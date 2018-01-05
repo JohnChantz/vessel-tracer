@@ -59,7 +59,7 @@ socketio.of('/requestData').on('connection', function (socket) {
     socket.on('clientReady', function () {
         console.log('Socket.IO says: Received event from client');
         console.log('Data stream to client initiated');
-        cursor = model.ShipsDataModel.find({}).lean().limit(10000).cursor();
+        cursor = model.ShipsDataModel.find({}).lean().cursor();
         cursor.map(function (doc) {
             return model.transformer(doc);
         });
@@ -69,14 +69,6 @@ socketio.of('/requestData').on('connection', function (socket) {
             socket.on('moreData', function () {
                 cursor.resume();
             });
-            // socket.on('resumeStream', function () {
-            //     console.log('Client requested stream resume!')
-            //     cursor.resume();
-            // })
-            // socket.on('pauseStream', function () {
-            //     console.log('Client requested stream pause!')
-            //     cursor.pause();
-            // })
         });
         cursor.on('error', function () {
             console.log('Error!');
