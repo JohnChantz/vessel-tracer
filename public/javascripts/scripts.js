@@ -64,7 +64,12 @@ var saveShip = function(ship) {
     if (element != null)
       if (element.properties.MMSI == ship.properties.MMSI) {
         var latlng = L.latLng(ship.geometry.coordinates);
-        element.coordinates.push(latlng);
+        if (element.coordinates.length < 10) {
+          element.coordinates.push(latlng);
+        } else if (element.coordinates.length == 10) {
+          element.coordinates.shift();
+          element.coordinates.push(latlng);
+        }
         refreshPolyline(element.shipPolyline, element.coordinates);
         // addToPolyline(element.shipPolyline, ship.geometry.coordinates);
         // addToLineString_OL(element.lineString, ship.geometry.coordinates);
