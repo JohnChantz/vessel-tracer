@@ -52,6 +52,7 @@ socketio.of('/requestData').on('connection', function (socket) {
 
     socket.on('disconnect', function (reason) {
         console.log('Socket.IO says: User disconected | Reason: ' + reason);
+        cursor.close();
     });
     socket.on('error', function (error) {
         console.log('Socket.IO says: User disconected | Error: ' + error);
