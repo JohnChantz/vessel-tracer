@@ -56,6 +56,7 @@ var createMap = function() {
     id: 'mapbox.dark',
     accessToken: 'pk.eyJ1Ijoiam9obmNoIiwiYSI6ImNqOGs0bGthazA5aXEyd3BjdzI1bWxoa2YifQ.QA5sfeo1MO_qJ5-b6NBdJQ'
   }).addTo(map);
+  map.scrollWheelZoom.disable();
 }
 
 var saveShip = function(ship) {
@@ -64,9 +65,9 @@ var saveShip = function(ship) {
     if (element != null)
       if (element.properties.MMSI == ship.properties.MMSI) {
         var latlng = L.latLng(ship.geometry.coordinates);
-        if (element.coordinates.length < 10) {
+        if (element.coordinates.length < 1000) {
           element.coordinates.push(latlng);
-        } else if (element.coordinates.length == 10) {
+        } else if (element.coordinates.length == 1000) {
           element.coordinates.shift();
           element.coordinates.push(latlng);
         }
@@ -79,8 +80,8 @@ var saveShip = function(ship) {
   if (!flag) {
     var newShip = {};
     newShip['properties'] = ship.properties;
-    var latlng = L.latLng(ship.geometry.coordinates);
     newShip['coordinates'] = [];
+    var latlng = L.latLng(ship.geometry.coordinates);
     newShip.coordinates.push(latlng);
     newShip['shipPolyline'] = new L.polyline([latlng], {
       color: randomColor(),
@@ -89,7 +90,7 @@ var saveShip = function(ship) {
       '<strong>MMSI number: </strong>' + ship.properties.MMSI + '<br/>' +
       '<strong>IMO number: </strong>' + ship.properties.IMO + '<br/>' +
       '<strong>Ship type: </strong>' + ship.properties.ship_type + '<br/>' +
-      '<strong>Destination: </strong>' + ship.properties.destination + '<br/>');;
+      '<strong>Destination: </strong>' + ship.properties.destination + '<br/>');
     allTheShips.push(newShip);
   }
 }
