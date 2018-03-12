@@ -6,10 +6,11 @@ var io = require('socket.io');
 var mongoose = require('mongoose');
 var model = require('./models/ship');
 var db = require('./models/db')
-require('events').EventEmitter.defaultMaxListeners = 0;
-
 var index = require('./routes/index');
 var app = express();
+
+require('events').EventEmitter.defaultMaxListeners = 0;
+
 
 //view engine setup
 app.set('views', path.join(__dirname, 'views'));
