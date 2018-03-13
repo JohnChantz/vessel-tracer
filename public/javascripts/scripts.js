@@ -1,6 +1,7 @@
 var map;
 var allTheShips = [];
 var socket;
+var coordinatesArraySize = 10;
 
 var changeTimestamp = function(t) {
   var timestamp = document.getElementById('timestamp');
@@ -65,9 +66,9 @@ var saveShip = function(ship) {
     if (element != null)
       if (element.properties.MMSI == ship.properties.MMSI) {
         var latlng = L.latLng(ship.geometry.coordinates);
-        if (element.coordinates.length < 1000) {
+        if (element.coordinates.length < coordinatesArraySize) {
           element.coordinates.push(latlng);
-        } else if (element.coordinates.length == 1000) {
+        } else if (element.coordinates.length == coordinatesArraySize) {
           element.coordinates.shift();
           element.coordinates.push(latlng);
         }
@@ -119,4 +120,10 @@ var randomColor = function() {
     color += letters[Math.floor(Math.random() * 16)];
   }
   return color;
+}
+
+var sliderValueRefresh = function(slider){
+  var value = document.getElementById("sliderValue");
+  value.innerHTML = slider.value;
+  coordinatesArraySize = slider.value;
 }

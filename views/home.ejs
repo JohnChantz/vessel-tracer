@@ -20,20 +20,25 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-dark bg-dark">
+    <nav id="navTop" class="navbar navbar-dark bg-dark">
         <h3 id="navTitle">
             <i class="material-icons" style="font-size:36px">directions_boat</i> Vessel Route Tracer</h3>
         <div id="info">
             <p>Timestamp:
-                <span id="timestamp">2015-08-01 00:26:12</span>
+                <span id="timestamp">2015-08-01 00:00:00</span>
             </p>
             <p>Number of ships displayed:
                 <span id="shipNumber">0</span>
             </p>
         </div>
         <div id="controlls">
-            <button onclick="resumeStream()" type="button" class="btn btn-success">Resume</button>
-            <button onclick="pauseStream()" type="button" class="btn btn-warning">Pause</button>
+            <!-- <button onclick="resumeStream()" type="button" class="btn btn-success">Resume</button>
+            <button onclick="pauseStream()" type="button" class="btn btn-warning">Pause</button> -->
+            <div class="slidecontainer">
+                <input type="range" min="10" max="1000" value="10" class="slider" id="mySlider" oninput="sliderValueRefresh(this)">
+                <span>Value: </span>
+                <span id="sliderValue">10</span>
+            </div>
         </div>
     </nav>
     <div id="map"></div>
@@ -43,13 +48,37 @@
         totalShipsDisplayed();
     </script>
     <main role="main">
-        <div class="jumbotron">
+        <div id="jumb1" class="jumbotron">
             <div class="container">
                 <h3 class="display-5">Vessel Route Tracer</h3>
+                <p class="lead">
+                    <strong>Vessel Tracer</strong> is a web app that visualizes the routes of ships.</p>
+                <hr class="my-4">
+                <p class="lead">It allows you to view the route of ships from a dataset.</p>
             </div>
         </div>
+        <div id="jumb2" class="jumbotron">
+            <div class="container">
+                <h3 class="display-5">Search</h3>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="shipMMSI">Ship MMSI:</label>
+                    <input type="text" class="form-control" placeholder="Enter MMSI">
+                    <small class="form-text text-muted">Give ship's MMSI.</small>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
     </main>
-    <nav class="navbar navbar-dark bg-dark"></nav>
+    <nav id="navBottom" class="navbar navbar-dark bg-dark">
+        <p>Harokopeio Panepistimio | Vessel Tracer </p>
+        <p>'Map data &copy;
+            <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
+            <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery ©
+            <a href="http://mapbox.com">Mapbox</a>'</p>
+    </nav>
 </body>
 
 </html>
