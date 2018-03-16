@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+let mongoose = require('mongoose');
+let Schema = mongoose.Schema;
 
-var shipsDataSchema = new mongoose.Schema({
+let shipSchema = new Schema({
     MMSI: Number,
     IMO: Number,
     LAT: Number,
@@ -13,12 +14,12 @@ var shipsDataSchema = new mongoose.Schema({
     TYPE_NAME: String,
     DESTINATION: String
 });
-var ShipsDataModel = mongoose.model('shipsGeoData', shipsDataSchema, 'shipsGeoData');
+let shipModel = mongoose.model('shipsGeoData', shipSchema, 'shipsGeoData');
 
-var transformer = function (doc) {
-    var jsonResponse = {};
-    jsonResponse['type'] = 'Feature';
-    jsonResponse['properties'] = {
+var transformer = (doc) => {
+    let jsonResponse = {};
+    jsonResponse.type = 'Feature';
+    jsonResponse.properties = {
         'shipname': doc.SHIPNAME,
         'MMSI': doc.MMSI,
         'IMO': doc.IMO,
@@ -26,14 +27,17 @@ var transformer = function (doc) {
         'destination': doc.DESTINATION,
         'timestamp': doc.TIMESTAMP
     };
-    var coordintates = [];
-    coordintates.push(doc.LAT, doc.LON)       //d3 must have lon,lat and not lat,lon
-    jsonResponse['geometry'] = { 'type': 'LineString', 'coordinates': coordintates };
+    let coordintates = [];
+    coordintates.push(doc.LAT, doc.LON); //d3 must have lon,lat and not lat,lon
+    jsonResponse.geometry = {
+        'type': 'LineString',
+        'coordinates': coordintates
+    };
     return jsonResponse;
-}
+};
 
 module.exports = {
-    shipsDataSchema: shipsDataSchema,
-    ShipsDataModel: ShipsDataModel,
+    shipSchema: shipSchema,
+    shipModel: shipModel,
     transformer
-}
+};
