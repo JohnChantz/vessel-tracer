@@ -1,6 +1,6 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-let dbUrl = 'mongodb://localhost:27017/myDatabase';
+const dbUrl = 'mongodb://localhost:27017/myDatabase';
 
 mongoose.connect(dbUrl, {
     useMongoClient: true

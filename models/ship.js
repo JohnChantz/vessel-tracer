@@ -1,7 +1,7 @@
-let mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-let shipSchema = new Schema({
+const shipSchema = new Schema({
     MMSI: Number,
     IMO: Number,
     LAT: Number,
@@ -14,7 +14,7 @@ let shipSchema = new Schema({
     TYPE_NAME: String,
     DESTINATION: String
 });
-let shipModel = mongoose.model('shipsGeoData', shipSchema, 'shipsGeoData');
+const shipModel = mongoose.model('shipsGeoData', shipSchema, 'shipsGeoData');
 
 var transformer = (doc) => {
     let jsonResponse = {};

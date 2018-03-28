@@ -1,25 +1,25 @@
 let map;
-let allTheShips = [];
+// let allTheShips = [];
 let socket;
-let coordinatesArraySize = 100;
+let coordinatesArraySize = 500;
+let ships = new Map();
+let resume = true;
 
-var changeTimestamp = (t) => {
-  let timestamp = document.getElementById('timestamp');
-  timestamp.innerHTML = t;
+var changeTimestamp = (time) => {
+  $('#timestamp').text(time);
 };
 
 var handleSocket = () => {
-  $(document).ready(() => {
-    socket = io('http://localhost:4000/streamData');
-    socket.emit('clientReady');
-    socket.on('data', (data) => {
-      saveShip(data);
-      changeTimestamp(data.properties.timestamp);
+  socket = io('http://localhost:3000/streamData');
+  socket.emit('clientReady');
+  socket.on('data', (data) => {
+    mapShips(data);
+    changeTimestamp(data.properties.timestamp);
+    if (resume)
       socket.emit('moreData');
-    });
-    socket.on('done', () => {
-      console.log('Done!');
-    });
+  });
+  socket.on('done', () => {
+    console.log('Done!');
   });
 };
 
@@ -54,14 +54,47 @@ var createMap = () => {
   });
   //https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?
   L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
-    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    attribution: 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
     id: 'mapbox.dark',
     accessToken: 'pk.eyJ1Ijoiam9obmNoIiwiYSI6ImNqOGs0bGthazA5aXEyd3BjdzI1bWxoa2YifQ.QA5sfeo1MO_qJ5-b6NBdJQ'
   }).addTo(map);
   map.scrollWheelZoom.disable();
 };
 
-var saveShip = (ship) => {
+var mapShips = (ship) => {
+  let element = ships.get(ship.properties.MMSI);
+  if (typeof element != 'undefined') {
+    let latlng = L.latLng(ship.geometry.coordinates);
+    if (element.coordinates.length < coordinatesArraySize) {
+      element.coordinates.push(latlng);
+    } else if (element.coordinates.length == coordinatesArraySize) {
+      element.coordinates.shift();
+      element.coordinates.push(latlng);
+    }
+    refreshPolyline(element.shipPolyline, element.coordinates);
+  } else {
+    let newShip = {};
+    newShip.properties = ship.properties;
+    newShip.coordinates = [];
+    let latlng = L.latLng(ship.geometry.coordinates);
+    newShip.coordinates.push(latlng);
+    newShip.shipPolyline = new L.polyline([latlng], {
+      color: randomColor(),
+      className: 'polylineStyle',
+    }).addTo(map).bindPopup(
+      '<h5>Ship Info</h5>' + '<hr>' +
+      '<strong>Shipname: </strong>' + ship.properties.shipname + '<br/>' +
+      '<strong>MMSI number: </strong>' + ship.properties.MMSI + '<br/>' +
+      '<strong>IMO number: </strong>' + ship.properties.IMO + '<br/>' +
+      '<strong>Ship type: </strong>' + ship.properties.ship_type + '<br/>' +
+      '<strong>Destination: </strong>' + ship.properties.destination + '<br/>' +
+      '<hr>' +
+      '<button type="button" class="btn btn-primary" onclick="plotRoute()">Show route</button>');
+    ships.set(ship.properties.MMSI, newShip);
+  }
+};
+
+/*var saveShip = (ship) => {
   let i;
   let flag = allTheShips.some((element) => {
     if (element != null)
@@ -95,10 +128,10 @@ var saveShip = (ship) => {
     allTheShips.push(newShip);
   }
 };
-
+*/
 var totalShipsDisplayed = () => {
   window.setInterval(() => {
-    shipsNum = allTheShips.length;
+    shipsNum = ships.size;
     let shipNumber = document.getElementById('shipNumber');
     shipNumber.innerHTML = shipsNum;
   }, 3000);
@@ -106,11 +139,14 @@ var totalShipsDisplayed = () => {
 
 var resumeStream = () => {
   console.log('Resume');
-  socket.emit('resumeStream');
+  if (resume === false) {
+    socket.emit('moreData');
+    resume = true;
+  }
 };
 var pauseStream = () => {
   console.log('Pause');
-  socket.emit('pauseStream');
+  resume = false;
 };
 
 var randomColor = () => {
@@ -131,9 +167,11 @@ var sliderValueRefresh = (slider) => {
 var findShip = (MMSI) => {
   mmsi = document.getElementById("mmsiInput").value;
   tableBody = document.getElementById("tableBody");
-  $.get("http://127.0.0.1:4000/ships/" + mmsi, (data) => {
-    ship = JSON.parse(data);
-    $(tableBody).append(`
+  td = $("td:contains(" + mmsi + ")");
+  if (td.length == 0)
+    $.get("http://127.0.0.1:3000/api/ship/" + mmsi, (data) => {
+      ship = JSON.parse(data);
+      $(tableBody).append(`
       <tr>
         <td>` + ship.MMSI + `</td>
         <td>` + ship.IMO + `</td>
@@ -142,6 +180,25 @@ var findShip = (MMSI) => {
         <td>` + ship.DESTINATION + `</td>
       </tr>
     `);
-  });
-
+    });
 };
+
+var plotRoute = (MMSI) => {
+  mmsi = 247229800;
+  coordinates = [];
+  $.get("http://127.0.0.1:3000/api/ships/" + mmsi, (data) => {
+    ships = JSON.parse(data);
+    ships.forEach((element) => {
+      let latlng = L.latLng(element.coordinates);
+      coordinates.push(latlng);
+    });
+    L.polyline(coordinates, {
+      color: randomColor(),
+      className: 'polylineStyle',
+    }).addTo(map);
+  });
+};
+
+var startDraw = () => {
+  console.log('Clicked!');
+}

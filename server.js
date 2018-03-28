@@ -1,35 +1,41 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var pug = require('pug');
-var io = require('socket.io');
-var model = require('./models/ship');
-var db = require('./models/dbConnection');
-var index = require('./routes/index');
-var app = express();
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const io = require('socket.io');
+const events = require('events');
+var morgan = require('morgan');
+const mongoose = require('mongoose');
 
-require('events').EventEmitter.defaultMaxListeners = 0;
+const model = require('./models/ship');
+const db = require('./models/dbConnection');
+const index = require('./routes/index');
 
-//view engine setup
+const app = express();
+
+events.EventEmitter.defaultMaxListeners = 0;
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), () => {
+  console.log('Server listening on port: ' + app.get('port'));
+});
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
-//setup static files
 app.use(favicon(path.join(__dirname, 'public/images', 'favicon.ico')));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(morgan('dev'));
 
-//setup middleware
 app.use('/', index);
 
 //catch 404 error and forward to error handler
 app.use((req, res, next) => {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -39,25 +45,21 @@ app.use((err, req, res, next) => {
   res.render('error');
 });
 
-//setup the server with express
-var server = app.listen(4000, () => {
-  console.log('Server listening on port 4000');
-});
 // setup socket.io
 var socketio = io(server);
 socketio.of('/streamData').on('connection', (socket) => {
-  var cursor;
-  console.log('Socket.IO says: New user connected!');
+  let cursor;
+  // console.log('Socket.IO says: New user connected!');
 
   socket.on('disconnect', (reason) => {
-    console.log('Socket.IO says: User disconected | Reason: ' + reason);
+    // console.log('Socket.IO says: User disconected | Reason: ' + reason);
   });
   socket.on('error', (error) => {
-    console.log('Socket.IO says: User disconected | Error: ' + error);
+    // console.log('Socket.IO says: User disconected | Error: ' + error);
   });
   socket.on('clientReady', () => {
-    console.log('Socket.IO says: Received event from client');
-    console.log('Data stream to client initiated');
+    // console.log('Socket.IO says: Received event from client');
+    // console.log('Data stream to client initiated');
     cursor = model.shipModel.find({}).lean().cursor();
     cursor.map((doc) => {
       return model.transformer(doc);
@@ -70,10 +72,10 @@ socketio.of('/streamData').on('connection', (socket) => {
       });
     });
     cursor.on('error', () => {
-      console.log('Error!');
+      // console.log('Error!');
     });
     cursor.on('end', () => {
-      console.log('Stream from MongoDB ended!');
+      // console.log('Stream from MongoDB ended!');
       socket.emit('done');
     });
   });

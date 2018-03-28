@@ -4,15 +4,20 @@ let model = require('../models/ship');
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    console.log('-->Home page served');
     res.render('home');
 });
-router.get('/ships/:ship_mmsi', (req, res) => {
-    console.log("-->API: find ship");
+router.get('/api/ship/:ship_mmsi', (req, res) => {
     model.shipModel.findOne({
         "MMSI": req.params.ship_mmsi
     }, (err, ship) => {
         res.json(JSON.stringify(ship));
+    });
+});
+router.get('/api/ships/:ship_mmsi', (req, res) => {
+    model.shipModel.find({
+        "MMSI": req.params.ship_mmsi
+    }, (err, ships) => {
+        res.json(JSON.stringify(ships));
     });
 });
 module.exports = router;

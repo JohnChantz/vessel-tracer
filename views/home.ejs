@@ -21,46 +21,57 @@
 </head>
 
 <body>
-    <nav id="navTop" class="navbar navbar-dark bg-dark">
+    <nav id="navTop" class="navbar navbar-dark fixed-top bg-dark">
         <h3 id="navTitle">
-            <i class="material-icons" style="font-size:36px">directions_boat</i> Vessel Route Tracer</h3>
+            <i class="material-icons" id="boatIcon" style="font-size:36px">directions_boat</i> Vessel Route Tracer</h3>
         <div id="info">
-            <p>Timestamp:
-                <span id="timestamp">2015-08-01 00:00:00</span>
+            <p>
+                Timestamp:
+                <span id="timestamp"> 2015-08-01 00:00:00 </span>
             </p>
             <p>Number of ships displayed:
-                <span id="shipNumber">0</span>
+                <span id="shipNumber"> 0 </span>
             </p>
         </div>
         <div id="controlls">
             <h6 style="text-align:center">
                 <strong>Controlls</strong>
             </h6>
-            <div class="slidecontainer">
-                <input type="range" min="10" max="1000" value="100" class="slider" id="mySlider" oninput="sliderValueRefresh(this)">
+            <!-- <div class="slidecontainer">
+                <input type="range" min="100" max="1000" step="100" value="100" class="slider" id="mySlider" oninput="sliderValueRefresh(this)">
                 <span>Value: </span>
                 <span id="sliderValue">100</span>
-            </div>
+            </div> -->
             <button id="resume" onclick="resumeStream()" type="button" class="btn btn-outline-success">Resume</button>
             <button id="pause" onclick="pauseStream()" type="button" class="btn btn-outline-warning">Pause</button>
         </div>
     </nav>
-    <div id="map"></div>
+    <div id="map">
+        <div class="leaflet-top leaflet-right">
+            <button id="startButton" onclick="startDraw()">Start Drawing</button>
+        </div>
+    </div>
     <script>
-        createMap();
-        handleSocket();
-        totalShipsDisplayed();
+        $(document).ready(() => {
+            createMap();
+            handleSocket();
+            totalShipsDisplayed();
+        });
     </script>
-    <!-- <main role="main"> -->
     <div class="container">
-        <div class="row">
+        <div class="row" id="row1">
             <div class="col-8">
                 <div id="jumb1" class="jumbotron">
                     <h3 class="display-5">Vessel Route Tracer</h3>
                     <p class="lead">
-                        <strong>Vessel Tracer</strong> is a web app that visualizes the routes of ships.</p>
+                        <strong>Vessel Tracer</strong> is a web app that visualizes the routes of ships in
+                        <span class="text-primary">real time</span>.
+                    </p>
                     <hr class="my-4">
-                    <p class="lead">It allows you to view the route of ships from a dataset.</p>
+                    <p>The app gets data from a dataset with the coordinates of the route that each ship has followed. This
+                        information is stored in a MongoDB database and the server serves these data to the client via socket
+                        communication, using the Socket.io library
+                    </p>
                 </div>
             </div>
             <div class="col-4">
@@ -78,7 +89,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" id="tableRow">
             <div class="col-12">
                 <div class="jumbotron">
                     <table class="table table-hover">
@@ -98,13 +109,13 @@
             </div>
         </div>
     </div>
-    <!-- </main> -->
     <nav id="navBottom" class="navbar navbar-dark bg-dark">
         <p>Harokopeio Panepistimio | Vessel Tracer </p>
         <p>'Map data &copy;
             <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
             <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery ©
-            <a href="http://mapbox.com">Mapbox</a>'</p>
+            <a href="http://mapbox.com">Mapbox</a>'
+        </p>
     </nav>
 </body>
 
