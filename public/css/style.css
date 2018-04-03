@@ -3,8 +3,13 @@
 }
 
 body {
+    color: aliceblue;
     background-color: #777777;
     font-family: 'Quattrocento Sans', sans-serif;
+}
+
+.container {
+    color: black;
 }
 
 .polylineStyle {
@@ -14,47 +19,59 @@ body {
     opacity: 0.8;
 }
 
-.travelMarker {
-    fill: yellow;
-    opacity: 0.75;
-}
-
 #map {
     height: 600px;
     width: 98%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 110px;
+    margin-top: 135px;
     margin-bottom: 10px;
     border-radius: 15px;
     position: relative;
 }
 
-#startButton {
+/* #sizeInput {
+    opacity: 0.6;
+    position: relative;
+    margin-top: 10px;
+    border-radius: 5px;
+    border-color: gray;
+    border-style: solid;
+    border-width: 1px 1px 1px 1px;
+    width: 70px;
+}
+
+#sizeInput:hover {
+    opacity: 0.9;
+} */
+
+/* #startButton {
     display: flex;
     opacity: 0.6;
     position: relative;
-    top: 20px;
-    right: 20px;
-    padding: 10px;
+    margin: 10px;
     background-color: white;
     border-radius: 5px;
     border-color: gray;
     border-style: solid;
     border-width: 1px 1px 1px 1px;
+    float: right;
 }
 
 #startButton:hover {
     opacity: 0.9;
-    cursor: pointer;
 }
 
-#info {
+#startButton:disabled {
+    color: red;
+} */
+
+#startControl {
+    float: right;
     margin: auto;
 }
 
 #navTop {
-    color: aliceblue;
     top: 0;
     width: 100%;
 }
@@ -72,13 +89,19 @@ body {
 }
 
 #navBottom {
-    color: white;
     bottom: 0;
     width: 100%;
+    text-align: center;
 }
 
 #resume {
-    margin-right: 60px;
+    margin-right: 30px;
+    float: left;
+}
+
+#pause {
+    margin-right: 5px;
+    float: left;
 }
 
 .row {

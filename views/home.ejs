@@ -25,37 +25,56 @@
         <h3 id="navTitle">
             <i class="material-icons" id="boatIcon" style="font-size:36px">directions_boat</i> Vessel Route Tracer</h3>
         <div id="info">
-            <p>
-                Timestamp:
-                <span id="timestamp"> 2015-08-01 00:00:00 </span>
-            </p>
-            <p>Number of ships displayed:
-                <span id="shipNumber"> 0 </span>
-            </p>
+
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">Timestamp:</label>
+                    <label id="timestamp" class="input-group-text"> 2015-08-01 00:00:00 </label>
+                </div>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <label class="input-group-text">Number of ships displayed:</label>
+                    <label id="shipNumber" class="input-group-text"> 0 </label>
+                </div>
+            </div>
         </div>
-        <div id="controlls">
+        <div id="controls">
             <h6 style="text-align:center">
-                <strong>Controlls</strong>
+                <strong>Controls</strong>
             </h6>
-            <!-- <div class="slidecontainer">
-                <input type="range" min="100" max="1000" step="100" value="100" class="slider" id="mySlider" oninput="sliderValueRefresh(this)">
-                <span>Value: </span>
-                <span id="sliderValue">100</span>
-            </div> -->
             <button id="resume" onclick="resumeStream()" type="button" class="btn btn-outline-success">Resume</button>
             <button id="pause" onclick="pauseStream()" type="button" class="btn btn-outline-warning">Pause</button>
+            <div id="startControl">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <label class="input-group-text" for="inputGroupSelect01">Trace Length</label>
+                    </div>
+                    <select id="sizeInput" class="custom-select">
+                        <option selected>Default...</option>
+                        <option value="10">10</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                        <option value="300">300</option>
+                        <option value="400">400</option>
+                        <option value="500">500</option>
+                    </select>
+                    <button type="button" class="btn btn-secondary" id="startButton" onclick="startStream()">Start Stream</button>
+
+                </div>
+                <!-- <input id="sizeInput" type="number" name="size"> -->
+                <!-- <button id="startButton" onclick="startStream()">Start Stream</button> -->
+            </div>
         </div>
     </nav>
     <div id="map">
-        <div class="leaflet-top leaflet-right">
-            <button id="startButton" onclick="startDraw()">Start Drawing</button>
-        </div>
     </div>
     <script>
         $(document).ready(() => {
             createMap();
-            handleSocket();
-            totalShipsDisplayed();
         });
     </script>
     <div class="container">

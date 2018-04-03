@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "webpack /public/javascripts/scripts.js dist/bundle.js"
   },
   "author": "john ch",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
-    "nodemon": "^1.12.1"
+    "nodemon": "^1.12.1",
+    "webpack": "^4.4.1"
   }
 }

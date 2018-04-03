@@ -1,7 +1,7 @@
 let map;
 // let allTheShips = [];
 let socket;
-let coordinatesArraySize = 500;
+let coordinatesArraySize = 10;
 let ships = new Map();
 let resume = true;
 
@@ -9,18 +9,27 @@ var changeTimestamp = (time) => {
   $('#timestamp').text(time);
 };
 
-var handleSocket = () => {
-  socket = io('http://localhost:3000/streamData');
-  socket.emit('clientReady');
-  socket.on('data', (data) => {
-    mapShips(data);
-    changeTimestamp(data.properties.timestamp);
-    if (resume)
-      socket.emit('moreData');
-  });
-  socket.on('done', () => {
-    console.log('Done!');
-  });
+var startStream = () => {
+  console.log('Stream started!');
+  let size = $('#sizeInput').val();
+  console.log(size);
+  if (size != null) {
+    coordinatesArraySize = size;
+    // $('#startButton').prop('disabled', true);
+    $('#startControl').hide('easing');
+    socket = io('http://localhost:3000/streamData');
+    totalShipsDisplayed();
+    socket.emit('clientReady');
+    socket.on('data', (data) => {
+      mapShips(data);
+      changeTimestamp(data.properties.timestamp);
+      if (resume)
+        socket.emit('moreData');
+    });
+    socket.on('done', () => {
+      console.log('Done!');
+    });
+  }
 };
 
 var addMarker = (properties, coordinates) => {
@@ -198,7 +207,3 @@ var plotRoute = (MMSI) => {
     }).addTo(map);
   });
 };
-
-var startDraw = () => {
-  console.log('Clicked!');
-}
