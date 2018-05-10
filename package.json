@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "build": "webpack /public/javascripts/scripts.js dist/bundle.js"
+    "build": "webpack -p",
+    "babel": "babel --presets es2015 ./public/javascripts/scripts.js -o ./dist/bundle.js"
   },
   "author": "john ch",
   "license": "ISC",
@@ -15,15 +15,19 @@
     "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.16.1",
-    "leaflet-easybutton": "^2.3.0",
     "mongodb": "^2.2.33",
     "mongoose": "^4.12.1",
     "morgan": "^1.9.0",
     "serve-favicon": "^2.4.5",
+    "simplify-js": "^1.2.3",
     "socket.io": "^2.0.4"
   },
   "devDependencies": {
+    "babel-loader": "^7.1.4",
+    "css-loader": "^0.28.11",
     "nodemon": "^1.12.1",
-    "webpack": "^4.4.1"
+    "style-loader": "^0.20.3",
+    "webpack": "^4.4.1",
+    "webpack-cli": "^2.0.13"
   }
 }

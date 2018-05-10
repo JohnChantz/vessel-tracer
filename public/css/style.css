@@ -4,146 +4,104 @@
 
 body {
     color: aliceblue;
-    background-color: #777777;
+    background-color: #404040;
     font-family: 'Quattrocento Sans', sans-serif;
-}
-
-.container {
-    color: black;
+    position: relative;
 }
 
 .polylineStyle {
     /* stroke-dasharray: 5, 5; */
-    stroke-width: 3;
+    stroke-width: 2;
     stroke-linecap: round;
     opacity: 0.8;
 }
 
 #map {
     height: 600px;
-    width: 98%;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 135px;
-    margin-bottom: 10px;
-    border-radius: 15px;
-    position: relative;
-}
-
-/* #sizeInput {
-    opacity: 0.6;
-    position: relative;
     margin-top: 10px;
-    border-radius: 5px;
-    border-color: gray;
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
-    width: 70px;
-}
-
-#sizeInput:hover {
-    opacity: 0.9;
-} */
-
-/* #startButton {
-    display: flex;
-    opacity: 0.6;
     position: relative;
-    margin: 10px;
-    background-color: white;
-    border-radius: 5px;
-    border-color: gray;
-    border-style: solid;
-    border-width: 1px 1px 1px 1px;
-    float: right;
+    border-bottom: groove #222222;
+    border-top: groove #222222;
 }
-
-#startButton:hover {
-    opacity: 0.9;
-}
-
-#startButton:disabled {
-    color: red;
-} */
 
 #startControl {
     float: right;
-    margin: auto;
 }
 
-#navTop {
-    top: 0;
-    width: 100%;
+#startButton {
+    margin-left: 10px;
 }
 
-#jumb1 {
+#header {
     width: 100%;
-    float: left;
-    margin: auto;
+    background-color: #222222;
+    position: relative;
 }
 
-#jumb2 {
-    float: right;
+.footer {
+    position: absolute;
     width: 100%;
-    height: 290px;
-}
-
-#navBottom {
-    bottom: 0;
-    width: 100%;
+    background-color: #222222;
     text-align: center;
 }
 
-#resume {
-    margin-right: 30px;
-    float: left;
-}
-
-#pause {
-    margin-right: 5px;
-    float: left;
-}
-
-.row {
+.container {
+    background-color: #222222;
+    border-radius: 15px;
+    text-align: center;
+    width: 70%;
     margin-top: 10px;
+    margin-bottom: 20px;
 }
 
-#mySlider {
-    -webkit-appearance: none;
-    width: 100%;
-    height: 15px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    outline: none;
-    opacity: 0.7;
-    -webkit-transition: .2s;
-    transition: opacity .2s;
+.container p {
+    text-align: left;
 }
 
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: cadetblue;
-    cursor: pointer;
+#timestamp {
+    width: 200px;
+    color: #006899;
 }
 
-.slider::-moz-range-thumb {
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    background: cadetblue;
-    cursor: pointer;
+#shipNumber {
+    color: #006899;
 }
 
-.slidecontainer #sliderValue {
-    font-weight: bold;
-    color: cadetblue;
+#info {
+    border-right: ridge #343435;
 }
 
-.leaflet-popup-content-wrapper {
-    background-color: #343a40;
-    color: white;
+.popupClass{
     text-align: center;
+}
+
+.leaflet-container .leaflet-control-mouseposition {
+    background-color: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 0 5px #bbb;
+    padding: 0 5px;
+    margin: 0;
+    color: #333;
+    font: 11px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.leaflet-control-mouseCoordinate {
+    width: 250px;
+    min-height: 30px;
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4);
+    background: none repeat scroll 0 0 #fff;
+    color: #333;
+    padding: 6px 10px 6px 6px;
+}
+
+.leaflet-control-mouseCoordinate table {
+    width: 100%;
+}
+
+.coords {
+    width: 100px;
 }

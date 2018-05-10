@@ -30,7 +30,7 @@ var transformer = (doc) => {
     let coordintates = [];
     coordintates.push(doc.LAT, doc.LON); //d3 must have lon,lat and not lat,lon
     jsonResponse.geometry = {
-        'type': 'LineString',
+        'type': 'Point',
         'coordinates': coordintates
     };
     return jsonResponse;
