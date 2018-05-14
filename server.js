@@ -58,26 +58,40 @@ socketio.of('/streamData').on('connection', (socket) => {
     // console.log('Socket.IO says: User disconected | Error: ' + error);
   });
   socket.on('clientReady', () => {
+    let skip = 0;
     // console.log('Socket.IO says: Received event from client');
     // console.log('Data stream to client initiated');
-    cursor = model.shipModel.find({}).lean().cursor();
-    cursor.map((doc) => {
-      return model.transformer(doc);
+    cursor = model.shipModel.find({}, {}, {
+      limit: 100
+    }); //.cursor();
+    cursor.exec((err, data) => {
+      socket.emit('data', data);
     });
-    cursor.on('data', (doc) => {
-      socket.emit('data', doc);
-      cursor.pause();
-      socket.on('moreData', () => {
-        cursor.resume();
+    // cursor.map((doc) => {
+    //   return model.transformer(doc);
+    // });
+    // cursor.on('data', (doc) => {
+    // socket.emit('data', doc);
+    // cursor.pause();
+    socket.on('moreData', () => {
+      skip = skip + 100;
+      // cursor.resume();
+      cursor = model.shipModel.find({}, {}, {
+        limit: 100,
+        skip: skip
+      }); //.cursor();
+      cursor.exec((err, data) => {
+        socket.emit('data', data);
       });
     });
-    cursor.on('error', () => {
-      // console.log('Error!');
-    });
-    cursor.on('end', () => {
-      // console.log('Stream from MongoDB ended!');
-      socket.emit('done');
-    });
+    // });
+    // cursor.on('error', () => {
+    //   console.log('Error!');
+    // });
+    // cursor.on('end', () => {
+    //   console.log('Stream from MongoDB ended!');
+    //   socket.emit('done');
+    // });
   });
 });
 

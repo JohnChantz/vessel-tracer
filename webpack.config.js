@@ -1,22 +1,23 @@
 let path = require('path');
 
-module.exports = {
+const config = {
     entry: './public/javascripts/scripts.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'public/dist'),
         filename: 'bundle.js',
-        publicPath: '/dist'
+        publicPath: '/public'
     },
     module: {
-        loaders: [{
+        rules: [{
                 test: /\.js$/,
                 loader: 'babel-loader',
                 query: {
                     presets: ['es2015']
                 }
-            }, {
+            },
+            {
                 test: /\.css$/,
-                user: [
+                use: [
                     'style-loader',
                     'css-loader'
                 ]
@@ -25,3 +26,5 @@ module.exports = {
         ]
     }
 };
+
+module.exports = config;
