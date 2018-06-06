@@ -1,6 +1,6 @@
 let express = require('express');
 let router = express.Router();
-let model = require('../models/ship');
+let model = require('../models/ship').default;
 
 /* GET home page. */
 router.get('/', (req, res) => {

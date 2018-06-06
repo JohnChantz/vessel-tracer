@@ -7,12 +7,6 @@ L.Control.mouseCoordinate = L.Control.extend({
         gps: true,
         gpsLong: true,
         position: 'bottomleft',
-
-        _sm_a: 6378137.0,
-        _sm_b: 6356752.314,
-        _sm_EccSquared: 6.69437999013e-03,
-        _UTMScaleFactor: 0.9996
-
     },
     onAdd: function (map) {
         this._map = map;
@@ -20,10 +14,10 @@ L.Control.mouseCoordinate = L.Control.extend({
         if (L.Browser.mobile || L.Browser.mobileWebkit || L.Browser.mobileWebkit3d || L.Browser.mobileOpera || L.Browser.mobileGecko)
             return L.DomUtil.create('div');
 
-        var className = 'leaflet-control-mouseCoordinate';
+        var className = 'leaflet-mouse-position-control';
         var container = this._container = L.DomUtil.create('div', className);
 
-        this._gpsPositionContainer = L.DomUtil.create("div", "gpsPos", container);
+        this._gpsPositionContainer = L.DomUtil.create("div", "", container);
 
         map.on("mousemove", this._update, this);
 
@@ -47,20 +41,18 @@ L.Control.mouseCoordinate = L.Control.extend({
             lat: lat,
             lng: lng
         };
-        var content = "<table>";
+        var content = "";
         if (this.options.gps) {
             //Round for display only
             var dLat = Math.round(lat * 100000) / 100000;
             var dLng = Math.round(lng * 100000) / 100000;
-            content += "<tr class='coords'><td>Coordinates</td><td>Lat: " + dLat + "</td><td>Lng: " + dLng + "</td></tr>";
             if (this.options.gpsLong) {
                 var gpsMinuten = this._geo2geodeziminuten(gps);
-                content += "<tr class='coords'><td>GPS</td><td >" + gpsMinuten.NS + " " + gpsMinuten.latgrad + "&deg; " + gpsMinuten.latminuten + "</td><td> " + gpsMinuten.WE + " " + gpsMinuten.lnggrad + "&deg; " + gpsMinuten.lngminuten + "</td></tr>";
+                content += gpsMinuten.NS + " " + gpsMinuten.latgrad + "&deg; " + gpsMinuten.latminuten + "</br>" + gpsMinuten.WE + " " + gpsMinuten.lnggrad + "&deg; " + gpsMinuten.lngminuten + "</br>";
                 var gpsMinutenSekunden = this._geo2gradminutensekunden(gps);
-                // content += "<tr><td></td><td>"+ gpsMinutenSekunden.NS + " " + gpsMinutenSekunden.latgrad + "&deg; "+ gpsMinutenSekunden.latminuten + "&prime; "+ gpsMinutenSekunden.latsekunden+"&Prime;</td><td> " + gpsMinutenSekunden.WE + " "+ gpsMinutenSekunden.lnggrad +"&deg; "+ gpsMinutenSekunden.lngminuten + "&prime; "+ gpsMinutenSekunden.lngsekunden+"&Prime;</td></tr>";
             }
+             content += "(" + dLat + " : " + dLng + ")";
         }
-        content += "</table>";
         this._gpsPositionContainer.innerHTML = content;
     },
 

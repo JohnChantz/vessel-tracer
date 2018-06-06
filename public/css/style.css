@@ -16,7 +16,6 @@ body {
     opacity: 0.8;
 }
 
-
 #map {
     height: 600px;
     width: 100%;
@@ -99,14 +98,6 @@ body {
     padding: 6px 10px 6px 6px;
 }
 
-.leaflet-control-mouseCoordinate table {
-    width: 100%;
-}
-
-.coords {
-    width: 100px;
-}
-
 .leaflet-tracksymbol-label {
     background: rgb(220, 220, 220);
     background: rgba(220, 220, 220, 0.9);
@@ -160,4 +151,7 @@ body {
 .leaflet-tracksymbol-label-right:before,
 .leaflet-tracksymbol-label-left:after {
     content: "";
+}
+
+.timestamp-on-map {
 }

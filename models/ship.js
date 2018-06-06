@@ -28,7 +28,7 @@ var transformer = (doc) => {
         'timestamp': doc.TIMESTAMP
     };
     let coordintates = [];
-    coordintates.push(doc.LAT, doc.LON); //d3 must have lon,lat and not lat,lon
+    coordintates.push(doc.LAT, doc.LON);
     jsonResponse.geometry = {
         'type': 'Point',
         'coordinates': coordintates
