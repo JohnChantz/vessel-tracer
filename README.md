@@ -7,3 +7,5 @@
   * Mongoose for server - database connectivity
 * Webscokets
   * Socket.io for server - client comunication
+* Maps
+  * LeafletJS with plugins
