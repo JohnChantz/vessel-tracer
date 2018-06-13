@@ -7,7 +7,7 @@ let resume = true;
 var changeTimestamp = (time) => {
   $('#timestamp').text(time);
   $('.timestamp-on-map').text(time);
-  
+
 };
 
 var startStream = () => {
@@ -48,7 +48,8 @@ var addMarker = (properties, coordinates) => {
 };
 
 var refreshPolyline = (polyline, coordinates) => {
-  polyline.setLatLngs(coordinates);
+  // simplifiedCoords = simplify(coordinates,1);
+  polyline.setLatLngs(simplifiedCoords);
 };
 var moveMarker = (marker, coordinates) => {
   marker.setLatLng(coordinates);
@@ -85,8 +86,7 @@ var createMap = () => {
 
 var mapShips = (ship) => {
   let element = ships.get(ship.MMSI);
-  let heading = ship.HEADING * 3.1459 / 180;
-  let course = ship.COURSE * 3.1459 / 180;
+  let course = ship.COURSE * Math.PI / 180;
   if (typeof element != 'undefined') {
     let latlng = [ship.LAT, ship.LON];
     if (element.coordinates.length < coordinatesArraySize) {
@@ -97,8 +97,18 @@ var mapShips = (ship) => {
     }
     refreshPolyline(element.shipPolyline, element.coordinates);
     element.trackSymbol.setLatLng(latlng);
-    // element.trackSymbol.setCourse(course);
     element.trackSymbol.setHeading(course);
+    updatePopupContent(element.trackSymbol, {
+      shipname: ship.SHIPNAME,
+      mmsi: ship.MMSI,
+      imo: ship.IMO,
+      type_name: ship.TYPE_NAME,
+      course: ship.COURSE,
+      speed: ship.SPEED,
+      heading: ship.HEADING,
+      destination: ship.DESTINATION,
+      timestamp: ship.TIMESTAMP
+    });
   } else {
     let newShip = {};
     let color = randomColor();
@@ -106,7 +116,7 @@ var mapShips = (ship) => {
     let latlng = [ship.LAT, ship.LON];
     newShip.coordinates.push(latlng);
     newShip.shipPolyline = new L.polyline([latlng], {
-      // smoothFactor: 2,
+      // smoothFactor: 1,
       color: color,
       className: 'polylineStyle'
     }).addTo(map);
@@ -114,22 +124,24 @@ var mapShips = (ship) => {
         trackId: ship.MMSI,
         fill: true,
         fillColor: color,
-        fillOpacity: 1.0,
+        fillOpacity: 1,
         stroke: true,
         color: color,
         opacity: 1.0,
         weight: 1.0,
-        size: 10,
-        heading: course,
-        minSilouetteZoom: 5
+        size: 13,
+        heading: course
       }).addTo(map)
       .bindPopup('<strong>Shipname: </strong>' + ship.SHIPNAME + '<br/>' +
         '<strong>MMSI number: </strong>' + ship.MMSI + '<br/>' +
         '<strong>IMO number: </strong>' + ship.IMO + '<br/>' +
         '<strong>Ship type: </strong>' + ship.TYPE_NAME + '<br/>' +
-        '<strong>Destination: </strong>' + ship.DESTINATION + '<br/>', {
-          className: 'ais-track-popup'
-        });
+        '<strong>Course: </strong>' + ship.COURSE + '&deg<br/>' +
+        '<strong>Speed: </strong>' + ship.SPEED + ' knots<br/>' +
+        '<strong>Heading: </strong>' + ship.HEADING + '&deg<br/>' +
+        '<strong>Destination: </strong>' + ship.DESTINATION + '<br/>' +
+        '<strong>Last update: </strong>' + ship.TIMESTAMP + '<br/>' +
+        "More Details on <a href='http://www.marinetraffic.com/en/ais/details/ships/mmsi:" + ship.MMSI + "' target='_blank'>MarineTraffic.com</a>");
     ships.set(ship.MMSI, newShip);
   }
 };
@@ -163,37 +175,15 @@ var randomColor = () => {
   return color;
 };
 
-var findShip = (MMSI) => {
-  mmsi = document.getElementById("mmsiInput").value;
-  tableBody = document.getElementById("tableBody");
-  td = $("td:contains(" + mmsi + ")");
-  if (td.length == 0)
-    $.get("http://127.0.0.1:3000/api/ship/" + mmsi, (data) => {
-      ship = JSON.parse(data);
-      $(tableBody).append(`
-      <tr>
-        <td>` + ship.MMSI + `</td>
-        <td>` + ship.IMO + `</td>
-        <td>` + ship.SHIPNAME + `</td>
-        <td>` + ship.TYPE_NAME + `</td>
-        <td>` + ship.DESTINATION + `</td>
-      </tr>
-    `);
-    });
-};
-
-var plotRoute = (t) => {
-  console.log(t);
-  // coordinates = [];
-  // $.get("http://127.0.0.1:3000/api/ships/" + mmsi, (data) => {
-  //   ships = JSON.parse(data);
-  //   ships.forEach((element) => {
-  //     let latlng = L.latLng(element.coordinates);
-  //     coordinates.push(latlng);
-  //   });
-  //   L.polyline(coordinates, {
-  //     color: randomColor(),
-  //     className: 'polylineStyle',
-  //   }).addTo(map);
-  // });
+var updatePopupContent = (trackSymbol, aisData) => {
+  trackSymbol._popup.setContent('<strong>Shipname: </strong>' + aisData.shipname + '<br/>' +
+    '<strong>MMSI number: </strong>' + aisData.mmsi + '<br/>' +
+    '<strong>IMO number: </strong>' + aisData.imo + '<br/>' +
+    '<strong>Ship type: </strong>' + aisData.type_name + '<br/>' +
+    '<strong>Course: </strong>' + aisData.course + '&deg<br/>' +
+    '<strong>Speed: </strong>' + aisData.speed + ' knots<br/>' +
+    '<strong>Heading: </strong>' + aisData.heading + '&deg<br/>' +
+    '<strong>Destination: </strong>' + aisData.destination + '<br/>' +
+    '<strong>Last update: </strong>' + aisData.timestamp + '<br/>' +
+    "More Details on <a href='http://www.marinetraffic.com/en/ais/details/ships/mmsi:" + aisData.mmsi + "' target='_blank'>MarineTraffic.com</a>");
 };
