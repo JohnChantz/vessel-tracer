@@ -2,111 +2,109 @@
 <html lang="en">
 
 <head>
-    <!--Scripts & Styles-->
-    <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="javascripts/scripts.js"></script>
-    <script src="javascripts/leaflet-tracksymbol.js"></script>
-    <script src="javascripts/leaflet.mouseCoordinate.js"></script>
-    <script src="javascripts/timestamp-control.js"></script>
-    <script src="javascripts/simplify.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9"
-        crossorigin="anonymous">
-    <!--Done-->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Vessel Route Tracer</title>
+  <!--Scripts & Styles-->
+  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="javascripts/scripts.js"></script>
+  <script src="javascripts/leaflet-tracksymbol.js"></script>
+  <script src="javascripts/leaflet.mouseCoordinate.js"></script>
+  <script src="javascripts/timestamp-control.js"></script>
+  <script src="javascripts/simplify.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.12/css/all.css" integrity="sha384-G0fIWCsCzJIMAVNQPfjH08cyYaUtMwjJwqiRKxxE/rx96Uroj1BtIQ6MLJuheaO9" crossorigin="anonymous">
+  <!--Done-->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vessel Route Tracer</title>
 </head>
 
 <body>
-    <nav id="header" class="navbar">
-        <h3 id="navTitle">
-            <i class="material-icons" id="boatIcon" style="font-size:36px">directions_boat</i> Vessel Route Tracer</h3>
-
-        <div id="startControl">
-            <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                    <label class="input-group-text" for="sizeInput">
+  <nav id="header" class="navbar">
+    <h3 id="navTitle">
+            <i class="material-icons" id="boatIcon" style="font-size:36px">directions_boat</i> Vessel Route Tracer
+    </h3>
+    <div id="startControl">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="sizeInput">
                         <strong>Trace Length: </strong>
                     </label>
-                </div>
-                <select id="sizeInput" class="form-control">
+        </div>
+        <select id="sizeInput" class="form-control">
                     <option selected value="100">Default</option>
                     <option value="50">Better Performace</option>
                     <option value="500">Balance</option>
                     <option value="2000">High Accuracy</option>
                 </select>
-                <button type="button" class="btn btn-primary" id="startButton" onclick="startStream()">Start Stream</button>
-            </div>
-        </div>
-    </nav>
-    <div id="map">
+        <button type="button" class="btn btn-primary" id="startButton" onclick="startStream()">Start Stream</button>
+      </div>
     </div>
-    <script>
-        $(document).ready(() => {
-            createMap();
-        });
-    </script>
-    <div class="container">
-        <div class="row">
-            <div id="info" class="col-6">
-                <span>
+  </nav>
+  <div id="map">
+  </div>
+  <script>
+    $(document).ready(() => {
+      createMap();
+    });
+  </script>
+  <div class="container">
+    <div class="row">
+      <div id="info" class="col-6">
+        <span>
                     <h5>
                         <i class="fas fa-angle-double-right"></i> Controls</h5>
                 </span>
-                <div id="controls">
-                    <button id="resume" onclick="resumeStream()" type="button" class="btn btn-outline-success">Resume</button>
-                    <button id="pause" onclick="pauseStream()" type="button" class="btn btn-outline-warning">Pause</button>
-                </div>
-                <p>With the buttons above you can Pause and Resume the steam.</p>
-            </div>
-            <div class="col-6">
-                <span>
+        <div id="controls">
+          <button id="resume" onclick="resumeStream()" type="button" class="btn btn-outline-success">Resume</button>
+          <button id="pause" onclick="pauseStream()" type="button" class="btn btn-outline-warning">Pause</button>
+        </div>
+        <p>With the buttons above you can Pause and Resume the steam.</p>
+      </div>
+      <div class="col-6">
+        <span>
                     <h5>
                         <i class="fas fa-angle-double-right"></i> Info</h5>
                 </span>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text">Timestamp:</label>
-                        <label id="timestamp" class="input-group-text">
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text">Timestamp:</label>
+            <label id="timestamp" class="input-group-text">
                             <strong> 2015-08-01 00:00:00 </strong>
                         </label>
-                    </div>
-                </div>
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <label class="input-group-text">Number of ships displayed:</label>
-                        <label id="shipNumber" class="input-group-text">
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <label class="input-group-text">Number of ships displayed:</label>
+            <label id="shipNumber" class="input-group-text">
                             <strong>0</strong>
                         </label>
-                    </div>
-                </div>
-                <p>These fields display the timestamp and the number of ships displayed.</p>
-            </div>
+          </div>
         </div>
+        <p>These fields display the timestamp and the number of ships displayed.</p>
+      </div>
     </div>
+  </div>
 
-    <footer class="footer">
-        <p>
-            <i class="fas fa-university"></i> Harokopeio Panepistimio | Vessel Tracer
-            <i class="fas fa-ship"></i>
-        </p>
-        <p>
-            <i class="fas fa-info-circle"></i>
-            Map data &copy;
-            <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
-            <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery ©
-            <a href="http://mapbox.com">Mapbox</a>
-        </p>
-    </footer>
+  <footer class="footer">
+    <p>
+      <i class="fas fa-university"></i> Harokopeio Panepistimio | Vessel Tracer
+      <i class="fas fa-ship"></i>
+    </p>
+    <p>
+      <i class="fas fa-info-circle"></i> Map data &copy;
+      <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,
+      <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery ©
+      <a href="http://mapbox.com">Mapbox</a>
+    </p>
+  </footer>
 </body>
 
 </html>

@@ -66,7 +66,7 @@ var createMap = () => {
     zoom: 5,
     minZoom: 4,
     maxZoom: 17,
-    zoomControl: false
+    zoomControl: false,
   });
   L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/dark-v9/tiles/256/{z}/{x}/{y}?access_token={accessToken}", {
     id: "mapbox.dark",
@@ -87,7 +87,7 @@ var createMap = () => {
 
 var mapShips = (ship) => {
   let element = ships.get(ship.MMSI);
-  let heading = calculateHeading(ship.HEADING,ship.COURSE);
+  let heading = calculateHeading(ship.HEADING, ship.COURSE);
   let speedKnots = ship.SPEED / 10;
   if (typeof element != 'undefined') {
     let latlng = [ship.LAT, ship.LON];
@@ -112,13 +112,16 @@ var mapShips = (ship) => {
       timestamp: ship.TIMESTAMP
     });
   } else {
+    // if (ships.size >= 1000){
+    //   return;
+    // }
     let newShip = {};
     let color = randomColor();
     newShip.coordinates = [];
     let latlng = [ship.LAT, ship.LON];
     newShip.coordinates.push(latlng);
     newShip.shipPolyline = new L.polyline([latlng], {
-      // smoothFactor: 1,
+      smoothFactor: 1,
       color: color,
       className: 'polylineStyle'
     }).addTo(map);
@@ -196,3 +199,25 @@ var calculateHeading = (heading, course) => {
   else if (headingChecked == 'Not available')
     return (course * Math.PI) / 180;
 };
+
+function binarySearch(map, value) {
+  // initial values for start, middle and end
+  let start = 0;
+  let stop = map.size - 1;
+  let middle = Math.floor((start + stop) / 2);
+
+  // While the middle is not what we're looking for and the list does not have a single item
+  while (map[middle] !== value && start < stop) {
+    if (value < map[middle]) {
+      stop = middle - 1;
+    } else {
+      start = middle + 1;
+    }
+
+    // recalculate middle on every iteration
+    middle = Math.floor((start + stop) / 2);
+  }
+
+  // if the current middle item is what we're looking for return it's index, else return -1
+  return (map[middle] !== value) ? -1 : middle;
+}

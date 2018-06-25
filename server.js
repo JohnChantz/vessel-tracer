@@ -50,18 +50,14 @@ var socketio = io(server);
 socketio.of('/streamData').on('connection', (socket) => {
   let cursor;
   socket.on('disconnect', (reason) => {
-    // console.log('Socket.IO says: User disconected | Reason: ' + reason);
+    console.log('Socket.IO says: User disconected | Reason: ' + reason);
   });
   socket.on('error', (error) => {
-    // console.log('Socket.IO says: User disconected | Error: ' + error);
+    console.log('Socket.IO says: User disconected | Error: ' + error);
   });
   socket.on('clientReady', () => {
-    // console.log('Socket.IO says: Received event from client');
-    // console.log('Data stream to client initiated');
+    console.log('Data stream to client initiated');
     cursor = model.shipModel.find({}).lean().cursor();
-    // cursor.map((doc) => {
-    //   return model.transformer(doc);
-    // });
     cursor.on('data', (doc) => {
       socket.emit('data', doc);
       cursor.pause();
